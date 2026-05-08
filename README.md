@@ -1,148 +1,148 @@
-# Wall Street Valuation Workbench
+# 估值工作台 / Valuation Workbench
 
-English | [中文](README.zh-CN.md)
+[English](README.md) | 中文
 
-> Half-serious meme tool that runs **Wall Street IB-grade valuation** (DCF, P/E, P/B, EPS, sensitivity tables, forward-looking scenarios, archetype classification) on a person, a crush, a relationship, or yourself.
+> 用华尔街投行的方法 (DCF / P/E / P/B / EPS / 敏感性表 / 前瞻变量 / 投资策略) 给一个人、暧昧对象、一段感情、或者你自己做估值。半严肃 meme 工具。
 
 ```bash
 python app.py
-# open http://127.0.0.1:8782
+# 打开 http://127.0.0.1:8782
 ```
 
-- **Pure Python stdlib** — zero runtime dependencies; one command to start.
-- **Local-first** — all computation in your browser/machine; no upload, no telemetry.
-- **Bilingual** — English + 中文 on the same code.
-- **12+ canonical citations** — Modigliani-Miller, Gordon, Sharpe-Lintner, Damodaran, McKinsey *Valuation*, etc.
-- **Session-resumable** — auto-save to localStorage; export/import as JSON.
-- **Dynamic per-target form** — stages fixed (A/B/C/D), fields adapt per target type. Architecture inspired by [AI-decision-engine-zh](https://github.com/ZhenyuanPAN822/AI-decision-engine-zh).
-- **Forward-looking variable** — IB-style "what if X happens" sensitivity, named.
-- **Bloomberg-style tear sheet** — hero readouts, sensitivity heatmap, bear/base/bull comparison.
+- **纯 Python 标准库** — 零运行依赖, 一行启动。
+- **本机优先** — 所有计算都在你这台电脑上完成。不上传, 不联网, 不留 cookie。
+- **双语** — 中文 + 英文同一份代码。
+- **12+ 篇引用** — Modigliani-Miller, Gordon, Sharpe-Lintner, Damodaran, McKinsey *Valuation* 等。
+- **断点续跑** — localStorage 自动保存; 可导出为 JSON 文件分享或恢复。
+- **动态表单** — 阶段 (A/B/C/D) 固定, 表单字段根据估值对象动态生成。架构灵感来自 [AI-decision-engine-zh](https://github.com/ZhenyuanPAN822/AI-decision-engine-zh)。
+- **前瞻变量** — IB 风格的"如果 X 发生, 估值变多少"敏感性。
+- **Bloomberg 风格 tear sheet** — 顶部 hero 读数 + 敏感性热力图 + bear/base/bull 三场景对比。
 
-## Four Valuation Targets
+## 四种估值对象
 
-| Target | Schema | Use case |
+| 对象 | 字段数 | 适用场景 |
 |---|---|---|
-| **Person** | 9 fields (reliability, competence, network, red flags, …) | Quick screen any person |
-| **Crush** | 10 fields (response quality, exclusivity, commitment signals, your weekly hours, …) | "Should I keep investing in this 暧昧 thing?" |
-| **Relationship** | 10 fields (conflict frequency, repair quality, growth alignment, exit cost, …) | "Should I stay in this relationship?" |
-| **Self** | 9 fields (skill quality, network, runway, growth rate, optionality, …) | Honest self-valuation |
+| **人** (person) | 9 | 朋友、同事、合作对象、相亲对象 — 快速 screen |
+| **暧昧对象** (crush) | 10 | "TA 到底值不值得继续投入" |
+| **一段感情** (relationship) | 10 | "应该 hold 还是 cut" — 评估维护成本、退出成本、forward step |
+| **自己** (self) | 9 | "我现在值多少" — 技能、人脉、增长率、可选性、健康 |
 
-## The 4-Stage Workflow
+## 4 阶段工作流
 
 ```
-A · Pick target type     →   B · Dynamic questionnaire
-                                      ↓
-D · Tear-sheet review    ←   C · Forward-looking variable + scenarios
+A · 选估值对象        →    B · 填动态问卷
+                                  ↓
+D · 估值报告 (tear sheet) ←  C · 前瞻变量 + 三场景
 ```
 
-Stages are fixed; the fields per stage are dynamically generated per target type.
+阶段固定, 每阶段的字段根据估值对象动态生成。
 
-## What You Get
+## 你能拿到什么
 
-- **Hero readouts:** P/E, P/B, EPS, fair value, upside %
-- **DCF:** 5-year discounted cash flow + Gordon terminal value
-- **Sensitivity table:** 5×5 grid varying growth (g) × discount rate (WACC)
-- **Three scenarios:** bear / base / bull, perturbing your forward-looking variable
-- **Archetype classification:** one of 8 — Blue Chip, Growth, Value Trap, Junk Bond, Penny Stock, Distressed, Defensive, Meme
-- **Investment strategy:** position (LONG/SHORT/FLAT/HEDGE), hold period, conviction (STRONG_BUY → STRONG_SELL)
-- **Improvement recommendations:** 3-5 actionable bullets specific to your archetype
-- **Markdown + JSON export**
+- **顶部读数:** P/E, P/B, EPS, 公允价值 (fair value), 上行/下行 (upside %)
+- **DCF:** 5 年现金流贴现 + Gordon 终值
+- **敏感性表:** 5×5 表, 变动增长率 g 和折现率 WACC
+- **三场景:** bear / base / bull, 围绕你的前瞻变量扰动
+- **原型分类:** 8 种之一 — 蓝筹股 / 成长股 / 价值陷阱 / 垃圾债 / 细价股 / 破产清算 / 防御股 / Meme 股
+- **投资策略:** 仓位 (LONG/SHORT/FLAT/HEDGE)、持有期、信心 (STRONG_BUY → STRONG_SELL)
+- **改进建议:** 3-5 条针对你的原型的可执行 bullet
+- **Markdown + JSON 导出**
 
-## Sample Verdict
+## 输出 verdict 样例
 
-> **Archetype: Distressed Asset** (fit 78%)
+> **原型: 价值陷阱 (Value Trap)** · 拟合度 72%
 >
-> M/M/1 ρ = ... wait, that's a different repo. Here:
->
-> > "DCF 显示公允价值 12.3 vs 你目前的 P 47 → 下行 −74%。
-> >  Eroding earnings + 高 P → SHORT, TERMINATE, STRONG_SELL.
+> > "P/E = 1.99 看起来便宜, 但 E 持续低迷, g 接近 0。
+> >  → 仓位 FLAT, 持有期 TERMINATE, 信心 SELL.
 > >
 > > **改进建议:**
-> > 1. 立即停止追加投入。
-> > 2. 评估退出成本 (exit cost), 选择最低成本路径离场。
-> > 3. 做事后复盘: 当初哪些信号被你忽视了?"
+> > 1. 停止增加投入 — 不要被低 PE 误导。
+> > 2. 诚实评估: TA 的 E 在过去 6 个月真的有提升迹象吗?如果没有, 这就是 trap。
+> > 3. 把节省下来的时间和情感分配到 alt option (备选标的)。"
 
-## Quick Start
+## 快速开始
 
 ```bash
 git clone https://github.com/<user>/valuation-workbench
 cd valuation-workbench
 python app.py
-# open http://127.0.0.1:8782
+# 打开 http://127.0.0.1:8782
 ```
 
-CLI:
+或 CLI:
 
 ```bash
 python app.py --cli --target crush --lang zh --out report.md
 ```
 
-Smoke test:
+或 smoke test:
 
 ```bash
 python scripts/smoke_test.py
 ```
 
-## Architecture
+## 架构
 
 ```
 valuation_workbench/
-├── schemas/                # per-target schemas (person/crush/relationship/self)
-│   ├── base                # SchemaField base
+├── schemas/                # 每类对象一个 schema (动态表单的根基)
 │   ├── person.py
 │   ├── crush.py
 │   ├── relationship.py
 │   └── self_eval.py
 ├── valuation/
-│   ├── core.py             # E/BV/P/g/β/WACC aggregation
+│   ├── core.py             # E / BV / P / g / β / WACC 聚合
 │   ├── ratios.py           # P/E, P/B, EPS
-│   ├── dcf.py              # 5-year DCF + Gordon TV + sensitivity table
-│   ├── archetype.py        # 8-archetype classifier
-│   └── strategy.py         # position/hold/conviction + improvements
-├── forward.py              # bear/base/bull scenarios + full pipeline
-├── session.py              # save/load
+│   ├── dcf.py              # 5 年 DCF + Gordon 终值 + 敏感性表
+│   ├── archetype.py        # 8 原型分类器
+│   └── strategy.py         # 仓位/持有期/信心 + 改进建议
+├── forward.py              # bear/base/bull 三场景 + 完整 pipeline
+├── session.py              # 保存/加载
 ├── exporter.py             # Markdown / JSON
-└── svg_renderer.py         # tear sheet, sensitivity heatmap, scenarios
+└── svg_renderer.py         # tear sheet / 敏感性热力图 / 三场景
 ```
 
-## Privacy
+## 隐私
 
-- HTTP server binds to `127.0.0.1` only.
-- Zero outbound network calls in core code.
-- localStorage only — your answers never leave your machine.
-- Synthetic-default landing — Stage A picks a target with no data needed.
+- HTTP 服务只绑定 `127.0.0.1`。
+- 核心代码无任何外部网络调用。
+- 只用 localStorage — 你的答案不离开本机。
+- 默认进入选择阶段, 不需要任何真实数据。
 
-## Keyboard Shortcuts
+## 用户友好特性
 
-- `S` — save session, `L` — load, `R` — reset
-- `N` — next stage, `P` — previous stage
+- **断点续跑** — 每填一个滑块自动保存; 关闭浏览器再打开会自动恢复
+- **动态表单** — 字段根据你选的对象类型实时生成
+- **前瞻变量** — IB 风格 "if X happens" 自定义场景
+- **响应式** — 手机端可用
+- **键盘快捷键** — S 保存 / L 加载 / R 重置 / N 下一步 / P 上一步
+- **可访问性** — `prefers-reduced-motion` 支持
+- **离线可用** — 即使 Google Fonts 被墙也能用 (使用系统字体回退)
 
-## Testing
+## 测试
 
 ```bash
 python -m pytest tests/ -q
 ```
 
-49 tests covering DCF correctness, sensitivity grid, archetype reachability, schemas, forward scenarios, session round-trip, SVG validity, exporter format, hard-exclusion compliance.
+49 个测试覆盖: DCF 数值正确性、敏感性表网格、原型可达性、Schema 完备性、前瞻场景、会话往返、SVG 有效性、Markdown 格式、hard-exclusion 合规。
 
-## Citations
+## 引用
 
-- Modigliani, F., Miller, M. H. (1958). The Cost of Capital, Corporation Finance and the Theory of Investment. *American Economic Review*.
-- Gordon, M. J. (1962). *The Investment, Financing, and Valuation of the Corporation*.
-- Sharpe, W. F. (1964). Capital Asset Prices. *Journal of Finance*.
-- Lintner, J. (1965). The Valuation of Risk Assets. *Review of Economics and Statistics*.
-- Fama, E. F., French, K. R. (1993). Common risk factors. *Journal of Financial Economics*.
-- Damodaran, A. (2002). *Investment Valuation*.
-- Koller, T., Goedhart, M., Wessels, D. (2020). *Valuation: Measuring and Managing the Value of Companies* (McKinsey).
-- Markowitz, H. (1952). Portfolio Selection. *Journal of Finance*.
-- Black, F., Scholes, M. (1973). The Pricing of Options. *Journal of Political Economy*.
-- Tversky, A., Kahneman, D. (1979). Prospect Theory. *Econometrica*.
-- Bowlby, J. (1969). *Attachment and Loss*.
+- Modigliani-Miller (1958, 1961)
+- Gordon (1962) — Gordon 增长模型
+- Sharpe-Lintner (1964/1965) — CAPM
+- Fama-French (1993) — 三因子
+- Damodaran (2002) — *Investment Valuation*
+- Koller-Goedhart-Wessels (2020) — McKinsey *Valuation*
+- Markowitz (1952), Black-Scholes (1973)
+- Tversky-Kahneman (1979) — 前景理论
+- Bowlby (1969) — 依恋理论
 
-## License
+## 许可
 
-MIT.
+MIT。
 
-## Caveat
+## 免责
 
-Half-serious tool using IB metaphors. **Not financial advice. Not relationship advice. Not therapy.** Conclusions describe how the inputs you supplied map onto IB valuation methodology — they say nothing definitive about real people or real relationships.
+半严肃 meme 工具, 使用 IB 估值方法做隐喻映射。**不构成财务建议, 不构成恋爱建议, 不是心理咨询。** 结论只描述你输入的参数如何在 IB 方法学下被映射成 valuation — 不对真实的人或真实的关系作任何确定性判断。
