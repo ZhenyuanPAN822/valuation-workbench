@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="240" viewBox="0 0 720 240">
+<rect width="720" height="240" fill="#0b0e1f"/>
+<text x="20" y="32" font-family="Fraunces, Noto Serif SC, serif" font-style="italic" font-weight="500" font-size="22" fill="#f5ecd9">价值陷阱 <tspan fill="#ffb454">/</tspan> Valuation Tear Sheet</text>
+<line x1="20" y1="48" x2="700" y2="48" stroke="#ffb454" stroke-width="1" opacity="0.4"/>
+<g font-family="JetBrains Mono, monospace" fill="#f5ecd9">
+<text x="20" y="80" font-size="11" fill="#ffb454" letter-spacing="2">P/E</text>
+<text x="20" y="118" font-size="32" font-family="Fraunces, serif" font-weight="500">2.15</text>
+<text x="140" y="80" font-size="11" fill="#ffb454" letter-spacing="2">P/B</text>
+<text x="140" y="118" font-size="32" font-family="Fraunces, serif" font-weight="500">1.34</text>
+<text x="260" y="80" font-size="11" fill="#ffb454" letter-spacing="2">EPS</text>
+<text x="260" y="118" font-size="32" font-family="Fraunces, serif" font-weight="500">4.63</text>
+<text x="380" y="80" font-size="11" fill="#ffb454" letter-spacing="2">FAIR VALUE</text>
+<text x="380" y="118" font-size="32" font-family="Fraunces, serif" font-weight="500">12.7</text>
+<text x="540" y="80" font-size="11" fill="#ffb454" letter-spacing="2">UPSIDE</text>
+<text x="540" y="118" font-size="32" font-family="Fraunces, serif" font-weight="500" fill="#7ec4cf">+27.0%</text>
+</g>
+<line x1="20" y1="148" x2="700" y2="148" stroke="#f5ecd9" stroke-width="0.5" opacity="0.2"/>
+<text x="20" y="178" font-family="JetBrains Mono, monospace" font-size="11" fill="#7ec4cf" letter-spacing="2">POSITION · HOLD · CONVICTION</text>
+<text x="20" y="210" font-family="Fraunces, Noto Serif SC, serif" font-style="italic" font-size="20" fill="#f5ecd9">FLAT · TERMINATE · <tspan fill="#ffb454">SELL</tspan></text>
+</svg>
