@@ -59,31 +59,69 @@ body {
   font-size: 17px; line-height: 1.7;
   color: var(--ink); background: var(--bg);
   min-height: 100vh; -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 35% at 12% 6%, rgba(196,99,42,0.08), transparent 60%),
+    radial-gradient(ellipse 45% 35% at 88% 92%, rgba(44,93,107,0.06), transparent 65%);
+}
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.04;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: multiply;
+}
+@keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+main > * { animation: rise-in 0.5s ease-out backwards; }
+main > *:nth-child(1) { animation-delay: 0.04s; }
+main > *:nth-child(2) { animation-delay: 0.10s; }
+main > *:nth-child(3) { animation-delay: 0.16s; }
+main > *:nth-child(4) { animation-delay: 0.22s; }
+main > *:nth-child(5) { animation-delay: 0.28s; }
+main > *:nth-child(6) { animation-delay: 0.34s; }
+main > *:nth-child(n+7) { animation-delay: 0.40s; }
+@media (prefers-reduced-motion: reduce) {
+  main > * { animation: none; }
 }
 header.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  max-width: 1200px; margin: 0 auto; padding: 22px 36px 12px;
+  display: flex; align-items: center; gap: 14px;
+  max-width: 1320px; margin: 0 auto; padding: 18px 28px 10px;
+  flex-wrap: nowrap; overflow: hidden;
 }
 header.topbar .brand {
   font-family: 'Fraunces','Noto Serif SC', serif;
-  font-weight: 500; font-size: 24px; letter-spacing: -0.01em;
+  font-weight: 500; font-size: 21px; letter-spacing: -0.01em;
+  white-space: nowrap; flex-shrink: 0;
 }
 header.topbar .brand em { color: var(--rust); font-style: italic; font-weight: 500; }
-header.topbar .brand .dot { color: var(--rust); margin-right: 6px; }
-header.topbar .stages { display: flex; gap: 6px; flex-wrap: wrap; }
+header.topbar .brand .dot { color: var(--rust); margin-right: 4px; }
+header.topbar .stages {
+  display: flex; gap: 4px; flex-wrap: nowrap;
+  flex: 1; min-width: 0; justify-content: center;
+  overflow-x: auto; scrollbar-width: none;
+}
+header.topbar .stages::-webkit-scrollbar { display: none; }
 .stage-pill {
-  padding: 6px 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px;
-  letter-spacing: 0.05em; color: var(--ink-3);
+  padding: 5px 9px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px;
+  letter-spacing: 0.04em; color: var(--ink-3);
   border: 1px solid var(--rule); border-radius: 999px; background: var(--paper);
+  white-space: nowrap; flex: 0 0 auto; line-height: 1.4;
 }
 .stage-pill.active { color: var(--paper); background: var(--rust); border-color: var(--rust); }
 .stage-pill.done { color: var(--teal); border-color: var(--teal); }
+header.topbar .ctls { display: flex; gap: 6px; flex-wrap: nowrap; flex-shrink: 0; }
 header.topbar .ctl {
-  margin-left: 8px; padding: 8px 14px; font-size: 13px;
+  padding: 6px 11px; font-size: 12px;
   border: 1px solid var(--rule); border-radius: 6px;
   background: var(--paper); color: var(--ink-2); cursor: pointer;
+  white-space: nowrap;
 }
 header.topbar .ctl:hover { color: var(--rust); border-color: var(--rust); }
+@media (max-width: 920px) {
+  header.topbar { flex-wrap: wrap; overflow: visible; }
+  header.topbar .stages { order: 3; flex-basis: 100%; justify-content: flex-start; padding-top: 4px; }
+}
 main { max-width: 1100px; margin: 0 auto; padding: 14px 36px 80px; }
 h1 {
   font-family: 'Fraunces','Noto Serif SC', serif;
@@ -147,7 +185,7 @@ h3 {
   color: var(--rust); font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 17px; font-weight: 600; margin-left: 8px;
 }
-.field input[type=number], .field input[type=text], .field select, .field textarea {
+.field input[type=number], .field input[type=text], .field input[type=password], .field select, .field textarea {
   width: 100%; font-size: 16px; padding: 12px 14px;
   background: var(--paper); color: var(--ink);
   border: 1px solid var(--rule); border-radius: 6px; outline: none;
@@ -156,6 +194,39 @@ h3 {
 .field input:focus, .field select:focus, .field textarea:focus {
   border-color: var(--rust); box-shadow: 0 0 0 3px rgba(196,99,42,0.15);
 }
+
+/* Custom dropdown — replaces native <select> to avoid browser/OS rendering bugs */
+.cdrop { position: relative; width: 100%; }
+.cdrop-trigger {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; padding: 12px 14px; font-size: 16px; font-family: inherit;
+  color: var(--ink); background: var(--paper);
+  border: 1px solid var(--rule); border-radius: 6px;
+  cursor: pointer; text-align: left;
+}
+.cdrop-trigger:hover { border-color: var(--rust-soft); }
+.cdrop.open .cdrop-trigger { border-color: var(--rust); box-shadow: 0 0 0 3px rgba(196,99,42,0.15); }
+.cdrop-trigger .arrow { color: var(--ink-3); margin-left: 10px; transition: transform 0.15s; }
+.cdrop.open .cdrop-trigger .arrow { transform: rotate(180deg); color: var(--rust); }
+.cdrop-menu {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 9999;
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
+  box-shadow: 0 10px 30px -8px rgba(28,32,39,0.18), 0 4px 8px rgba(28,32,39,0.06);
+  list-style: none; margin: 0; padding: 6px 0;
+  max-height: 320px; overflow-y: auto; display: none;
+}
+.cdrop.open .cdrop-menu { display: block; animation: cdrop-in 0.16s ease-out; }
+@keyframes cdrop-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+.cdrop-menu li {
+  padding: 11px 16px; cursor: pointer; color: var(--ink); font-size: 15px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.cdrop-menu li:hover { background: var(--bg-2); color: var(--rust); }
+.cdrop-menu li.on { background: rgba(196,99,42,0.08); color: var(--rust); font-weight: 600; }
+.cdrop-menu li.on::after { content: '✓'; }
+.cdrop-menu li.divider { padding: 0; height: 1px; background: var(--rule); margin: 4px 0; pointer-events: none; }
+.cdrop-menu li.custom-opt { color: var(--rust); font-style: italic; }
+.cdrop-menu li.custom-opt:hover { background: rgba(196,99,42,0.08); }
 .likert-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
 .likert-opt {
   flex: 1; min-width: 56px; padding: 12px 8px; border: 1px solid var(--rule);
@@ -416,26 +487,33 @@ APP_JS = r"""
   function saveCfg(c){ try{ localStorage.setItem(CFG, JSON.stringify(c)); }catch(e){} }
   window.__cfg = { loadCfg, saveCfg };
 
-  // ---------- top-bar buttons ----------
-  document.getElementById('btn-export')?.addEventListener('click', () => {
-    const sess = window.__store.getActive(); if (!sess) { showToast('无活动会话', 'error'); return; }
-    const blob = new Blob([JSON.stringify(sess, null, 2)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url;
-    a.download = 'valuation-' + (sess.id||Date.now()) + '.json'; a.click();
-    URL.revokeObjectURL(url); showToast('已导出', 'success');
-  });
-  document.getElementById('btn-import')?.addEventListener('click', () => document.getElementById('file-import').click());
-  document.getElementById('file-import')?.addEventListener('change', async (e) => {
-    const f = e.target.files[0]; if (!f) return;
-    try {
-      const obj = JSON.parse(await f.text());
-      if (!obj.id) obj.id = 's_imported_' + Date.now();
-      window.__store.saveActive(obj);
-      showToast('已导入', 'success'); setTimeout(()=>location.href='/', 700);
-    } catch(err){ showToast('导入失败: '+err.message, 'error'); }
-  });
-  document.getElementById('btn-home')?.addEventListener('click', () => location.href='/');
+  // ---------- DOM bindings (deferred to DOMContentLoaded) ----------
+  function bindTopbar(){
+    document.getElementById('btn-export')?.addEventListener('click', () => {
+      const sess = window.__store.getActive(); if (!sess) { showToast('无活动会话', 'error'); return; }
+      const blob = new Blob([JSON.stringify(sess, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url;
+      a.download = 'valuation-' + (sess.id||Date.now()) + '.json'; a.click();
+      URL.revokeObjectURL(url); showToast('已导出', 'success');
+    });
+    document.getElementById('btn-import')?.addEventListener('click', () => document.getElementById('file-import').click());
+    document.getElementById('file-import')?.addEventListener('change', async (e) => {
+      const f = e.target.files[0]; if (!f) return;
+      try {
+        const obj = JSON.parse(await f.text());
+        if (!obj.id) obj.id = 's_imported_' + Date.now();
+        window.__store.saveActive(obj);
+        showToast('已导入', 'success'); setTimeout(()=>location.href='/', 700);
+      } catch(err){ showToast('导入失败: '+err.message, 'error'); }
+    });
+    document.getElementById('btn-home')?.addEventListener('click', () => location.href='/');
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindTopbar);
+  } else {
+    bindTopbar();
+  }
 })();
 """
 
@@ -447,7 +525,7 @@ HEAD = """<!doctype html><html lang="zh"><head><meta charset="utf-8"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=JetBrains+Mono:wght@400;600&family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"/>
 <link rel="stylesheet" href="/static/style.css"/>
-<script defer src="/static/app.js"></script>
+<script src="/static/app.js"></script>
 </head><body>"""
 
 FOOTER = """<footer>对象/暧昧估值工作台 · v0.3 · 投行级估值引擎 · 多 LLM provider · 本机运行 · 12+ 文献引用</footer>
@@ -468,10 +546,10 @@ def _topbar(stage: str = "A") -> str:
     return f"""<header class="topbar">
 <div class="brand"><span class="dot">$</span>对象/暧昧 <em>估值工作台</em></div>
 <div class="stages">{''.join(pills)}</div>
-<div>
+<div class="ctls">
 <button class="ctl" id="btn-home" title="返回首页">⌂ 首页</button>
-<button class="ctl" id="btn-export" title="导出 JSON">↓ 导出</button>
-<button class="ctl" id="btn-import" title="导入 JSON">↑ 导入</button>
+<button class="ctl" id="btn-export" title="导出">↓ 导出</button>
+<button class="ctl" id="btn-import" title="导入">↑ 导入</button>
 <input id="file-import" type="file" accept="application/json" style="display:none"/>
 </div>
 </header>"""
@@ -488,22 +566,24 @@ def _esc(s) -> str:
 # ───────────────────────── Stage A: home + history + free-text + provider picker ─────────────────────────
 
 def _provider_picker_html() -> str:
-    prov_options = "".join(
-        f'<option value="{k}">{_esc(v["name"])}</option>'
-        for k, v in PROVIDERS.items()
-    )
     return f"""<div class="card">
 <h3>第 1 步 · 配置 LLM</h3>
 <p style="color:var(--ink-3); font-size:14.5px; margin:0 0 14px">支持 OpenAI / DeepSeek / Claude / Gemini / 自定义 OpenAI 兼容厂商。API Key 仅存在你浏览器的 localStorage。</p>
 <div class="provider-grid">
   <div class="field">
     <label class="fl">厂商</label>
-    <select id="provider-sel">{prov_options}</select>
+    <div class="cdrop" id="prov-drop">
+      <button type="button" class="cdrop-trigger"><span class="cdrop-label">DeepSeek</span><span class="arrow">▾</span></button>
+      <ul class="cdrop-menu"></ul>
+    </div>
   </div>
   <div class="field">
     <label class="fl">模型</label>
-    <select id="model-sel"></select>
-    <input type="text" id="model-custom" placeholder="自定义模型名" style="display:none; margin-top:8px"/>
+    <div class="cdrop" id="model-drop">
+      <button type="button" class="cdrop-trigger"><span class="cdrop-label">deepseek-chat</span><span class="arrow">▾</span></button>
+      <ul class="cdrop-menu"></ul>
+    </div>
+    <input type="text" id="model-custom" placeholder="输入自定义模型名" style="display:none; margin-top:10px"/>
   </div>
   <div class="field" style="grid-column: span 2">
     <label class="fl">API Key</label>
@@ -514,7 +594,7 @@ def _provider_picker_html() -> str:
     <input type="text" id="endpoint-custom" placeholder="https://your-host/v1/chat/completions"/>
   </div>
 </div>
-<div style="display:flex; gap:14px; align-items:center; margin-top:14px">
+<div style="display:flex; gap:14px; align-items:center; margin-top:14px; flex-wrap:wrap">
   <button type="button" class="btn-ghost" id="btn-test">测试连接</button>
   <span id="test-result"></span>
 </div>
@@ -523,63 +603,121 @@ def _provider_picker_html() -> str:
 <script>
 (function(){{
   const PROVIDERS = {json.dumps({k: {"name": v["name"], "models": v["models"], "default": v["default_model"], "ph": v["key_placeholder"]} for k, v in PROVIDERS.items()}, ensure_ascii=False)};
-  const provSel = document.getElementById('provider-sel');
-  const modelSel = document.getElementById('model-sel');
-  const modelCustom = document.getElementById('model-custom');
+
+  function setupCdrop(rootId, items, currentValue, onSelect){{
+    const root = document.getElementById(rootId);
+    if (!root) return null;
+    const trigger = root.querySelector('.cdrop-trigger');
+    const labelEl = root.querySelector('.cdrop-label');
+    const menu = root.querySelector('.cdrop-menu');
+    let value = currentValue;
+    function render(){{
+      menu.innerHTML = '';
+      items.forEach(it => {{
+        if (it.divider) {{ const li = document.createElement('li'); li.className='divider'; menu.appendChild(li); return; }}
+        const li = document.createElement('li');
+        if (it.custom) li.className = 'custom-opt';
+        if (String(it.value) === String(value)) li.classList.add('on');
+        li.textContent = it.label;
+        li.addEventListener('click', (e) => {{
+          e.stopPropagation();
+          value = it.value;
+          const matched = items.find(x => String(x.value) === String(it.value));
+          labelEl.textContent = matched ? matched.label : it.label;
+          root.classList.remove('open');
+          render();
+          if (onSelect) onSelect(it.value);
+        }});
+        menu.appendChild(li);
+      }});
+    }}
+    function setValue(v){{
+      value = v;
+      const it = items.find(x => String(x.value) === String(v));
+      labelEl.textContent = it ? it.label : (v || '—');
+      render();
+    }}
+    trigger.addEventListener('click', (e) => {{
+      e.stopPropagation();
+      document.querySelectorAll('.cdrop.open').forEach(d => {{ if (d !== root) d.classList.remove('open'); }});
+      root.classList.toggle('open');
+    }});
+    setValue(currentValue);
+    return {{ getValue: () => value, setValue }};
+  }}
+  document.addEventListener('click', () => {{
+    document.querySelectorAll('.cdrop.open').forEach(d => d.classList.remove('open'));
+  }});
+  document.addEventListener('keydown', (e) => {{
+    if (e.key === 'Escape') document.querySelectorAll('.cdrop.open').forEach(d => d.classList.remove('open'));
+  }});
+
   const keyIn = document.getElementById('api-key');
   const epWrap = document.getElementById('endpoint-wrap');
   const epIn = document.getElementById('endpoint-custom');
+  const modelCustom = document.getElementById('model-custom');
   const testBtn = document.getElementById('btn-test');
   const testResult = document.getElementById('test-result');
 
-  function rebuildModels(){{
-    const p = PROVIDERS[provSel.value];
-    modelSel.innerHTML = '';
-    (p.models||[]).forEach(m => {{
-      const o = document.createElement('option'); o.value = m; o.textContent = m; modelSel.appendChild(o);
+  const cfg = window.__cfg.loadCfg();
+  let modelDD = null;
+
+  function rebuildModelDD(provKey){{
+    const p = PROVIDERS[provKey];
+    const items = (p.models||[]).map(m => ({{ value: m, label: m }}));
+    if (items.length) items.push({{ divider: true }});
+    items.push({{ value: '__custom__', label: '⊕ 输入自定义模型名…', custom: true }});
+    let initial = cfg.model;
+    if (provKey !== cfg.provider) initial = '';
+    if (!initial && cfg.custom_model && provKey === cfg.provider) initial = '__custom__';
+    if (!initial || !items.some(it => String(it.value) === String(initial))) {{
+      initial = (p.models && p.models[0]) || '__custom__';
+    }}
+    modelDD = setupCdrop('model-drop', items, initial, (val) => {{
+      modelCustom.style.display = (val === '__custom__') ? '' : 'none';
+      snap();
     }});
-    const oc = document.createElement('option'); oc.value = '__custom__'; oc.textContent = '⊕ 自定义模型名…'; modelSel.appendChild(oc);
-    keyIn.placeholder = p.ph || 'API Key';
-    epWrap.style.display = (provSel.value === 'custom') ? '' : 'none';
-    onModelChange();
-  }}
-  function onModelChange(){{
-    modelCustom.style.display = (modelSel.value === '__custom__') ? '' : 'none';
+    modelCustom.style.display = (initial === '__custom__') ? '' : 'none';
   }}
 
-  // restore
-  const cfg = window.__cfg.loadCfg();
-  provSel.value = cfg.provider in PROVIDERS ? cfg.provider : 'deepseek';
-  rebuildModels();
-  if (cfg.model && [...modelSel.options].some(o => o.value === cfg.model)) modelSel.value = cfg.model;
-  else if (cfg.custom_model) {{ modelSel.value = '__custom__'; modelCustom.value = cfg.custom_model; }}
-  onModelChange();
+  const provItems = Object.keys(PROVIDERS).map(k => ({{ value: k, label: PROVIDERS[k].name }}));
+  const provInitial = cfg.provider in PROVIDERS ? cfg.provider : 'deepseek';
+  const provDD = setupCdrop('prov-drop', provItems, provInitial, (val) => {{
+    rebuildModelDD(val);
+    keyIn.placeholder = (PROVIDERS[val].ph) || 'API Key';
+    epWrap.style.display = (val === 'custom') ? '' : 'none';
+    snap();
+  }});
+  rebuildModelDD(provInitial);
+  keyIn.placeholder = (PROVIDERS[provInitial].ph) || 'API Key';
+  epWrap.style.display = (provInitial === 'custom') ? '' : 'none';
   keyIn.value = cfg.api_key || '';
   epIn.value = cfg.endpoint || '';
+  if (cfg.custom_model) modelCustom.value = cfg.custom_model;
 
   function snap(){{
+    const provider = provDD.getValue();
+    const modelSel = modelDD ? modelDD.getValue() : '';
     window.__cfg.saveCfg({{
-      provider: provSel.value,
+      provider,
       api_key: keyIn.value.trim(),
-      model: modelSel.value === '__custom__' ? '' : modelSel.value,
-      custom_model: modelSel.value === '__custom__' ? modelCustom.value.trim() : '',
+      model: modelSel === '__custom__' ? '' : modelSel,
+      custom_model: modelSel === '__custom__' ? modelCustom.value.trim() : '',
       endpoint: epIn.value.trim(),
     }});
   }}
-  provSel.addEventListener('change', () => {{ rebuildModels(); snap(); }});
-  modelSel.addEventListener('change', () => {{ onModelChange(); snap(); }});
   [keyIn, modelCustom, epIn].forEach(el => el.addEventListener('input', snap));
 
   testBtn.addEventListener('click', async () => {{
     snap();
-    testResult.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,0.2); border-top-color:var(--rust)"></span> 测试中…';
+    testResult.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,0.15); border-top-color:var(--rust)"></span> <span style="margin-left:6px; color:var(--ink-3)">测试中…</span>';
     try {{
-      const cfg = window.__cfg.loadCfg();
+      const c = window.__cfg.loadCfg();
       const r = await fetch('/api/probe_connection', {{
         method:'POST', headers:{{'Content-Type':'application/json'}},
         body: JSON.stringify({{
-          provider: cfg.provider, api_key: cfg.api_key,
-          model: cfg.model || cfg.custom_model, endpoint: cfg.endpoint,
+          provider: c.provider, api_key: c.api_key,
+          model: c.model || c.custom_model, endpoint: c.endpoint,
         }}),
       }});
       const data = await r.json();
@@ -927,7 +1065,13 @@ def _stage_f_body() -> str:
   function escapeHtml(s){{ return String(s||'').replace(/[&<>"']/g, c => ({{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}}[c])); }}
 
   function render(forward) {{
-    sess.forward = forward; window.__store.saveActive(sess);
+    sess.forward = forward;
+    // Auto-select recommended (or first) candidate if none chosen yet
+    if (!sess.forward_choice && forward.candidates && forward.candidates.length) {{
+      const rec = forward.candidates.find(c => c.recommended) || forward.candidates[0];
+      if (rec) sess.forward_choice = rec;
+    }}
+    window.__store.saveActive(sess);
     let html = '<p class="eyebrow">阶段 F · 前瞻变量与三场景</p>';
     html += '<h1>挑一个 <em>前瞻变量</em></h1>';
     html += '<div class="stage-why"><span class="lbl">什么是前瞻变量</span><p>' + escapeHtml(forward.explanation_zh || '') + '</p></div>';
@@ -1295,8 +1439,8 @@ class Handler(BaseHTTPRequestHandler):
             delta_pct = float(forward_choice.get("delta_pct", 0.30))
             forward_var_name = forward_choice.get("name_zh") or forward_choice.get("id", "")
             # Pick first perturb param as forward_var_id (best-effort)
+            perturb_params = tuple(forward_choice.get("perturb_ib_params") or [])
             forward_var_id = ""
-            perturb_params = forward_choice.get("perturb_ib_params") or []
             if perturb_params:
                 target_param = perturb_params[0]
                 for f in (schema.all_fields if hasattr(schema, "all_fields") else schema.fields):
@@ -1307,6 +1451,7 @@ class Handler(BaseHTTPRequestHandler):
                 description=desc, forward_var_id=forward_var_id,
                 forward_var_name=forward_var_name, delta_pct=delta_pct,
                 target_type=schema.subject_kind, mc_iters=800,
+                perturb_ib_params=perturb_params,
             )
             # Narrative call
             if llm.get("api_key"):

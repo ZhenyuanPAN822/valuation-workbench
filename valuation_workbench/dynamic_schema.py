@@ -9,6 +9,27 @@ from .llm.schema_prompt import IB_PARAMS, FALLBACK_SCHEMA
 
 _VALID_KINDS = {"likert5", "likert7", "number", "fillin", "select", "range"}
 
+# Canonical IB-param ranges the engine expects. Overrides LLM-supplied
+# to_min/to_max so the math stays in the right scale regardless of LLM drift.
+CANONICAL_IB_RANGES = {
+    "fcf_base":             (0.5, 8.0),
+    "revenue_growth_y1_3":  (-0.10, 0.30),
+    "revenue_growth_y4_5":  (-0.05, 0.15),
+    "terminal_growth":      (-0.02, 0.05),
+    "ebit_margin":          (0.05, 0.45),
+    "reinvestment_rate":    (0.05, 0.60),
+    "book_value":           (1.0, 30.0),
+    "comparable_pe":        (5.0, 30.0),
+    "comparable_pb":        (0.5, 4.0),
+    "comparable_ev_ebitda": (3.0, 15.0),
+    "wacc_risk_premium":    (0.0, 0.10),
+    "beta_proxy":           (0.4, 2.4),
+    "investment_cost":      (0.5, 30.0),
+    "exit_cost":            (0.0, 8.0),
+    "red_flags":            (0.0, 0.40),    # discount fraction
+    "moat":                 (0.0, 1.0),
+}
+
 
 def _parse_field(raw: dict, idx: int, stage_id: str = "", sub_theme: str = "") -> DynamicField | None:
     if not isinstance(raw, dict):
@@ -36,18 +57,26 @@ def _parse_field(raw: dict, idx: int, stage_id: str = "", sub_theme: str = "") -
             ))
         elif isinstance(o, str):
             opts_out.append((o, o, o))
+    # Accept both nested {mapping: {scale, to_min, to_max}} (LLM output)
+    # and flat {scale, to_min, to_max} (DynamicField.to_dict round-trip)
     mapping = raw.get("mapping") or {}
-    scale = str(mapping.get("scale", "linear"))
+    scale = str(mapping.get("scale") or raw.get("scale") or "linear")
     if scale not in ("linear", "inverse", "log"):
         scale = "linear"
     try:
-        to_min = float(mapping.get("to_min", 0.0))
-        to_max = float(mapping.get("to_max", 1.0))
+        to_min = float(mapping.get("to_min", raw.get("to_min", 0.0)))
+        to_max = float(mapping.get("to_max", raw.get("to_max", 1.0)))
     except (TypeError, ValueError):
         to_min, to_max = 0.0, 1.0
     ib_param = str(raw.get("ib_param") or "")
     if ib_param and ib_param not in IB_PARAMS:
         ib_param = ""
+
+    # Override with canonical ranges so engine math stays in the right scale
+    # regardless of LLM drift. The LLM's mapping.scale (linear/inverse/log) is preserved.
+    if ib_param in CANONICAL_IB_RANGES:
+        cmin, cmax = CANONICAL_IB_RANGES[ib_param]
+        to_min, to_max = cmin, cmax
 
     if kind == "likert5":
         mn_default, mx_default = 1, 5

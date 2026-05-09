@@ -180,15 +180,33 @@ def _sensitivity_from_ib(ib: IBInputs, archetype_id: str) -> SensitivityResult:
     return SensitivityResult(g_grid=g_grid, wacc_grid=rp_grid, table=tuple(rows))
 
 
-def build_scenarios_ib(schema: DynamicSchema, base_answers: dict, forward_var_id: str = "", delta_pct: float = 0.30) -> dict:
-    """Perturb forward_var_id (or all numeric fields, lightly) → bear/base/bull IBInputs."""
+def build_scenarios_ib(
+    schema: DynamicSchema,
+    base_answers: dict,
+    forward_var_id: str = "",
+    delta_pct: float = 0.30,
+    perturb_ib_params: tuple = (),
+) -> dict:
+    """Perturb forward variable → bear/base/bull IBInputs.
+
+    Perturbation strategy:
+    - If forward_var_id is set, perturb that single field.
+    - If perturb_ib_params is given, perturb ALL fields whose ib_param is in the set.
+    - Otherwise lightly perturb all numeric fields.
+    """
     ib_base = aggregate_ib_inputs(schema, base_answers)
 
     all_fields = schema.all_fields if hasattr(schema, "all_fields") else schema.fields
 
+    if perturb_ib_params:
+        target_ids = [f.id for f in all_fields if f.ib_param in perturb_ib_params]
+    elif forward_var_id:
+        target_ids = [forward_var_id]
+    else:
+        target_ids = [f.id for f in all_fields if f.kind in ("likert5", "likert7", "number", "range")]
+
     def perturb(factor: float) -> IBInputs:
         new_values = dict(base_answers)
-        target_ids = [forward_var_id] if forward_var_id else [f.id for f in all_fields if f.kind in ("likert5","likert7","number","range")]
         for fid in target_ids:
             f = next((x for x in all_fields if x.id == fid), None)
             if not f:
@@ -197,8 +215,12 @@ def build_scenarios_ib(schema: DynamicSchema, base_answers: dict, forward_var_id
             try:
                 cur_f = float(cur)
             except (TypeError, ValueError):
+                # For select fields, perturbation isn't meaningful — skip
                 continue
-            shifted = cur_f * (1 + factor)
+            # For inverse-scale fields, flip the perturbation direction so that
+            # bull/bear stays semantically consistent (bull = better outcome).
+            eff_factor = -factor if (f.scale or "linear") == "inverse" else factor
+            shifted = cur_f * (1 + eff_factor)
             shifted = max(f.min, min(f.max, shifted))
             new_values[fid] = shifted
         return aggregate_ib_inputs(schema, new_values)
@@ -215,6 +237,7 @@ def run_pipeline_ib(
     delta_pct: float = 0.30,
     target_type: str = "",
     mc_iters: int = 800,
+    perturb_ib_params: tuple = (),
 ) -> ForensicsReport:
     """Full IB pipeline: dyn_schema + answers → 3-stage DCF + multiples + asset + blend + MC."""
     ib = aggregate_ib_inputs(dyn_schema, answers_values)
@@ -233,7 +256,10 @@ def run_pipeline_ib(
 
     strategy = recommend(legacy_core, legacy_ratios, legacy_dcf, archetype, target_type or dyn_schema.subject_kind)
 
-    scenarios_ib = build_scenarios_ib(dyn_schema, answers_values, forward_var_id, delta_pct)
+    scenarios_ib = build_scenarios_ib(
+        dyn_schema, answers_values, forward_var_id, delta_pct,
+        perturb_ib_params=perturb_ib_params,
+    )
     scenarios_serializable = {}
     for name, ib_s in scenarios_ib.items():
         d3_s = compute_dcf_3stage(ib_s)
