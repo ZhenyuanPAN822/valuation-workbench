@@ -1,11 +1,12 @@
-# Valuation Workbench｜对象估值工作台
+# Valuation Workbench｜暧昧对象/对象估值工作台
 
-> 我们把 Goldman Sachs、Lazard、KKR 等顶级投行 / 私募常用的估值思路，改造成了给前任、对象、暧昧对象、暗恋对象的「投行级感情估值工具」。
-> 系统会根据你估值的对象类型、关系阶段和共同经历，动态生成一份专属的个性化问卷以及调整估值方法。
+**我们把 Goldman Sachs、Lazard、KKR 等顶级投行 / 私募常用的估值思路，改造成了给前任、对象、暧昧对象、暗恋对象的「投行级感情估值工具」。系统会根据你估值的对象类型、关系阶段和共同经历，动态生成一份专属的个性化问卷以及调整估值方法。**
 
-> 你可以把它理解成：用 DCF、可比倍数、资产法、情景分析、敏感性分析和投资备忘录，重新回答那个很难开口的问题——**TA 到底还值不值得继续投入？**
+**你可以把它理解成：用 DCF、可比倍数、资产法、情景分析、敏感性分析和投资备忘录，重新回答那个很难开口的问题——TA 到底还值不值得继续投入？**
 
 > 免责声明：本项目不与 Goldman Sachs、Lazard、KKR 或任何金融机构存在官方关联、合作或背书。上面的机构名称仅用于说明产品灵感来自公开金融估值框架与投研表达方式。本项目不是情感建议、投资建议或心理咨询。
+
+![首页：描述对象 → 6 阶段问卷 → 估值报告](docs/screenshots/01-home.png)
 
 ---
 
@@ -40,6 +41,12 @@ Valuation Workbench 是一个本地运行的「关系估值」工作台。
 - 投资策略：LONG / FLAT / SHORT / HEDGE
 - 关键风险、行动建议、退出信号
 - 可导出的 Markdown、JSON 和 SVG 图表
+
+![估值 Tear Sheet：P/E、P/B、EPS、Fair Value、Upside、仓位建议一目了然](docs/screenshots/02-tear-sheet.png)
+
+![Bull / Base / Bear 三场景对比 + Archetype 分类](docs/screenshots/03-scenarios.png)
+
+![敏感性分析：g × WACC → fair value 热力图](docs/screenshots/04-sensitivity.png)
 
 ---
 
@@ -109,6 +116,10 @@ http://127.0.0.1:8782
 
 你不需要懂金融。问题会尽量以日常语言出现，系统会在背后把答案映射为估值参数。
 
+![阶段 B5：你的成本与退路 · LBO floor — 量化沉没成本与退出代价](docs/screenshots/05-stage-b5.png)
+
+![阶段 B3：相处含金量 · 内在估值 — 量化情绪能量回报与稳定性](docs/screenshots/06-stage-b3.png)
+
 ### Step 4：选择前瞻变量
 
 问卷结束后，系统会给你一些可能影响估值的未来变量。
@@ -132,6 +143,8 @@ http://127.0.0.1:8782
 - `.md`：适合复制、发给朋友、继续编辑
 - `.json`：适合二次开发或存档
 - `.svg`：适合截图、做图、发社交平台
+
+![整体工作流：描述 → 量化 → 估值 → 结论，9 步走完一次完整的关系估值](docs/screenshots/07-workflow.png)
 
 ---
 
@@ -203,6 +216,8 @@ valuation-workbench/
 │   └── smoke_test.py              # 端到端冒烟测试
 ├── tests/                         # 单元测试
 ├── sample_outputs/                # 示例报告与图表
+├── docs/
+│   └── screenshots/               # README 用的产品截图
 ├── pyproject.toml
 └── README.md
 ```
