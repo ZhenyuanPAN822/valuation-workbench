@@ -12,14 +12,31 @@ from .models import (
     ValuationCore, RatiosResult, DCFResult, SensitivityResult,
     ArchetypeResult, StrategyResult, ForensicsReport,
     Session,
+    IBInputs, DCF3StageResult, MultiplesResult, AssetResult,
+    BlendedValuation, MonteCarloResult,
+    DynamicField, DynamicSubtheme, DynamicStage, DynamicSchema,
 )
 from .schemas import get_schema, list_targets, TARGET_LABELS
 from .valuation.core import compute_core
 from .valuation.ratios import compute_ratios
 from .valuation.dcf import compute_dcf, sensitivity_table
-from .valuation.archetype import classify
+from .valuation.archetype import classify, classify_ib
 from .valuation.strategy import recommend
-from .forward import build_scenarios, run_pipeline
+from .valuation.ib_engine import (
+    aggregate_ib_inputs, compute_dcf_3stage, compute_multiples,
+    compute_asset, blend_valuations, monte_carlo,
+)
+from .forward import build_scenarios, run_pipeline, run_pipeline_ib, build_scenarios_ib
+from .dynamic_schema import parse_dyn_schema, get_fallback_schema
+from .llm import (
+    call_llm, PROVIDERS, ProviderError, probe_connection, CUSTOM_MODEL_SENTINEL,
+    parse_llm_json, ParseError,
+    build_schema_prompt, FALLBACK_SCHEMA, IB_PARAMS, SIX_STAGES,
+    build_forward_prompt, FALLBACK_FORWARD,
+    schema_to_summary, answers_to_summary, ib_to_summary,
+    build_narrative_prompt, fallback_narrative,
+    valuation_to_summary, archetype_to_summary, forward_to_summary,
+)
 from .session import save_session, load_session, new_session
 from .exporter import to_markdown, to_json
 from .svg_renderer import (
@@ -28,7 +45,7 @@ from .svg_renderer import (
     render_scenario_comparison,
 )
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 CITATIONS = (
     "Modigliani, F., Miller, M. H. (1958). The Cost of Capital, Corporation Finance and the Theory of Investment. American Economic Review, 48, 261–297.",

@@ -1,22 +1,43 @@
-# 估值工作台 / Valuation Workbench
+# 对象/暧昧估值工作台 · Crush & Partner Valuation Workbench  ·  v0.3
 
 [English](README.md) | 中文
 
-> 用华尔街投行的方法 (DCF / P/E / P/B / EPS / 敏感性表 / 前瞻变量 / 投资策略) 给一个人、暧昧对象、一段感情、或者你自己做估值。半严肃 meme 工具。
+> 半严肃的投行级估值工具, **专门给你的对象或暧昧对象做估值**。LLM 根据你的描述个性化生成 6 阶段问卷 (对标 IPO 估值流程: 业务理解 → 历史财务 → 预测建模 → DCF → 可比公司 → 压力测试), 本地引擎跑三法综合估值 + 蒙特卡洛 P10/P50/P90, 然后 LLM 写一份完整的 IB 风格估值备忘录 (投资论点 / 三场景叙事 / Top 3 风险 / 行动清单 / 退出策略)。
 
 ```bash
-python app.py
-# 打开 http://127.0.0.1:8782
+python app.py            # http://127.0.0.1:8782
 ```
 
-- **纯 Python 标准库** — 零运行依赖, 一行启动。
-- **本机优先** — 所有计算都在你这台电脑上完成。不上传, 不联网, 不留 cookie。
+## v0.3 新增
+
+- **聚焦产品**: 不再是"给任何东西估值", 而是 **专门给对象 / 暧昧对象做估值**
+- **6 阶段动态流程** (B1-B6) 对标投行 IPO 估值: 她是谁 → 走向哪里 → 相处含金量 → 横向对照 → 成本与退路 → 压力情景
+- **LLM 决定每阶段的子主题** — 两段不同的关系会得到真正不同的问卷结构 (异地的问异地, 工作忙的问时间挤压, 有前任阴影的问对照感受)
+- **完整的 Provider/Model 选择器** (照搬 AI-decision-engine-zh): 每个厂商带预设 model 列表 + 自定义 model 输入框 + 自定义 OpenAI 兼容 endpoint + **测试连接探针按钮**
+- **3 个自包含 prompt** (schema / 前瞻变量 / 报告叙事) — 每个调用都携带全部上下文, 兼容那些不保留对话历史的 API 中转站
+- **LLM 生成投资备忘录**: 投资论点 / Bull-Base-Bear 三场景叙事 / Top 3 风险 (触发 / 后果 / 早期信号) / 本周-本月-本季行动清单 / 退出策略 / 关键假设 / 横向对照叙事
+- **前瞻变量自动产出** — LLM 看完答案后提 2-3 个候选前瞻变量 + 个性化 rationale + 推荐 Δ%, 不让用户填空
+- **明亮主题 + 大字体** — 米白底 + 深墨字, 基准 17-18px, 不混英文
+- **历史会话** — `crushValuation.sessions.v1` localStorage, 上限 20 条, 首页提供继续/删除按钮
+
+## v0.2 保留
+
+- **LLM 动态生成问卷** — 阶段 A 是一个自由输入框; LLM 根据你的描述生成 8-12 道 user-friendly 的"生活化代理问题",每题在后台绑定到真正的 IB 参数 (FCF / 增长率 / 利润率 / 风险溢价 / 可比 P/E / 账面价值 / 护城河 / red flags …)。架构照搬自 [AI-decision-engine-zh](https://github.com/ZhenyuanPAN822/AI-decision-engine-zh) — API key 在浏览器持有, 服务端只做透传。
+- **多 LLM provider** — DeepSeek / OpenAI / Anthropic / Gemini / 任意 OpenAI 兼容自定义 endpoint, 单次会话内可切换。
+- **三法加权综合估值** — 三阶段 DCF (5 年明确预测 + 5 年线性收敛 + Gordon 终值) **+** 可比公司倍数 (P/E + P/B + EV/EBITDA, 受护城河调权) **+** 资产/重置法; 按 archetype 加权混合, 输出公允价值的 low / mid / high 区间。
+- **CAPM WACC** — `rf + β·ERP + idiosyncratic risk premium`, 安全护栏: `WACC > terminal_g + 2%`。
+- **蒙特卡洛 P10 / P50 / P90** — 800 次抽样, 扰动增长率/利润率/WACC/β/可比倍数, 报告 `P(公允 > 投入成本)`。
+- **离线兜底** — 不勾选 LLM 也可以跑: 后端有一份 10 题通用 schema, 同一套引擎全程跑通, 不需要 API key。
+
+## v0.1 保留
+
+- **纯 Python 标准库** — 零运行依赖; LLM 调用用 `urllib`。
+- **本机优先** — 所有计算在你电脑上; LLM key 只存浏览器, 服务端日志不打印。
 - **双语** — 中文 + 英文同一份代码。
-- **12+ 篇引用** — Modigliani-Miller, Gordon, Sharpe-Lintner, Damodaran, McKinsey *Valuation* 等。
-- **断点续跑** — localStorage 自动保存; 可导出为 JSON 文件分享或恢复。
-- **动态表单** — 阶段 (A/B/C/D) 固定, 表单字段根据估值对象动态生成。架构灵感来自 [AI-decision-engine-zh](https://github.com/ZhenyuanPAN822/AI-decision-engine-zh)。
-- **前瞻变量** — IB 风格的"如果 X 发生, 估值变多少"敏感性。
-- **Bloomberg 风格 tear sheet** — 顶部 hero 读数 + 敏感性热力图 + bear/base/bull 三场景对比。
+- **12+ 篇引用** — Modigliani-Miller, Gordon, Sharpe-Lintner, Markowitz, Damodaran, McKinsey *Valuation*, Fama-French, Black-Scholes, Tversky-Kahneman, Bowlby 等。
+- **断点续跑** — localStorage 自动保存; 可导出 JSON 分享或恢复。
+- **前瞻变量** — 给那一个真正影响未来的事件起个名字, 引擎按 ±Δ% 在 bear/base/bull 三场景下扰动重算。
+- **Bloomberg 风格 tear sheet** — hero 读数 + P10/P50/P90 公允价值带 + 三法分解 + 敏感性热图 + 三场景对比。
 
 ## 四种估值对象
 

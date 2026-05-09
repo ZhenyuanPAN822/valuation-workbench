@@ -27,7 +27,7 @@ def test_markdown_en_has_sections():
 def test_json_serializable():
     js = to_json(_r("self"))
     parsed = json.loads(js)
-    assert parsed["version"] == "0.1.0"
+    assert parsed["version"] == "0.2.0"
     assert "core" in parsed and "ratios" in parsed and "dcf" in parsed
 
 

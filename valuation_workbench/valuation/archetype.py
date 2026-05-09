@@ -1,7 +1,7 @@
 """8-archetype classification based on (E, BV, P, g, beta) cluster."""
 from __future__ import annotations
 
-from ..models import ValuationCore, ArchetypeResult
+from ..models import ValuationCore, ArchetypeResult, IBInputs, BlendedValuation
 
 
 # Archetype definitions: (id, label_zh, label_en, description_zh, description_en, predicates)
@@ -112,5 +112,45 @@ def classify(core: ValuationCore, pe: float, pb: float, upside: float) -> Archet
         label_en=arch["label_en"],
         description_zh=arch["description_zh"],
         description_en=arch["description_en"],
+        fit_score=min(max(fit, 0.0), 1.0),
+    )
+
+
+def classify_ib(ib: IBInputs, blended: BlendedValuation) -> ArchetypeResult:
+    """Classify based on IB inputs + blended valuation."""
+    upside = blended.upside_pct
+    pe = blended.pe_final
+    pb = blended.pb_final
+    g = ib.growth_y1_3
+    beta = ib.beta
+    eps = blended.eps
+    bv = ib.book_value
+
+    scores = []
+    bc = max(0, (eps - 1.5)/2) + max(0, (bv - 8)/10) + max(0, (1.4 - beta)/1.1) + max(0, (18 - pe)/18) * 0.5 + max(0, ib.moat - 0.4) * 0.6
+    scores.append(("blue_chip", bc))
+    gr = max(0, (g - 0.08)/0.20) * 1.4 + max(0, (eps - 0.8)/3) * 0.4 + max(0, (10 - bv)/10) * 0.3
+    scores.append(("growth", gr))
+    vt = max(0, (12 - pe)/12) * 0.5 + max(0, (1.5 - pb)/1.5) * 0.4 + max(0, (0.04 - g)/0.20) + max(0, (0.10 - ib.ebit_margin)/0.10) * 0.4
+    scores.append(("value_trap", vt))
+    jb = max(0, (eps - 1.0)/2) * 0.4 + max(0, (beta - 1.5)/1.0) + max(0, (5 - bv)/5) * 0.5 + ib.red_flag_discount * 1.5
+    scores.append(("junk_bond", jb))
+    ps = max(0, (1.5 - eps)/1.5) * 0.4 + max(0, (5 - bv)/5) * 0.4 + max(0, (5 - ib.investment_cost)/5) * 0.4 + max(0, (g - 0.0)/0.25) * 0.4
+    scores.append(("penny_stock", ps))
+    ds = max(0, (0.5 - eps)/0.5) + max(0, (-0.05 - g)/0.20) * 1.2 + max(0, ib.red_flag_discount - 0.15) * 2.0 + max(0, (-upside)/0.5)
+    scores.append(("distressed", ds))
+    dv = max(0, (1.0 - abs(beta - 0.7))/1.0) + max(0, (1.0 - abs(eps - 1.5)/2.0)) * 0.5 + max(0, (1.0 - abs(g - 0.03)/0.10)) * 0.4
+    scores.append(("defensive", dv))
+    mm = max(0, (beta - 1.7)/0.8) + max(0, (pe - 30)/30) + max(0, (5 - bv)/5) * 0.4 + max(0, (ib.investment_cost - eps * 25)/(eps * 25 + 1)) * 0.6
+    scores.append(("meme", mm))
+
+    best_id, best_score = max(scores, key=lambda x: x[1])
+    arch = next(a for a in ARCHETYPES if a["id"] == best_id)
+    total = sum(max(s, 0.0) for _, s in scores)
+    fit = best_score / max(total, 0.01)
+    return ArchetypeResult(
+        archetype_id=best_id,
+        label_zh=arch["label_zh"], label_en=arch["label_en"],
+        description_zh=arch["description_zh"], description_en=arch["description_en"],
         fit_score=min(max(fit, 0.0), 1.0),
     )

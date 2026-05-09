@@ -1,0 +1,647 @@
+{
+  "version": "0.2.0",
+  "target_type": "other",
+  "answers": {},
+  "core": {
+    "E": 1.0625,
+    "BV": 15.5,
+    "P": 7.9375,
+    "g": 0.1,
+    "beta": 1.4,
+    "wacc": 0.174
+  },
+  "ratios": {
+    "pe": 7.470588235294118,
+    "pb": 0.5120967741935484,
+    "eps": 1.0625,
+    "pe_zh": "P/E = 7.47 → 低估区",
+    "pe_en": "P/E = 7.47 → undervalued",
+    "pb_zh": "P/B = 0.51 → 折价",
+    "pb_en": "P/B = 0.51 → below book"
+  },
+  "dcf": {
+    "five_year_pv": 11.848836270117232,
+    "terminal_value": 49.429808470683575,
+    "terminal_pv": 9.938205175244597,
+    "fair_value": 23.12519927485661,
+    "upside_pct": 1.9134109322653996,
+    "wacc": 0.174,
+    "g": 0.1
+  },
+  "sensitivity": {
+    "g_grid": [
+      -0.015,
+      -0.005,
+      0.005,
+      0.015,
+      0.025,
+      0.035,
+      0.045
+    ],
+    "wacc_grid": [
+      0.02,
+      0.03,
+      0.04,
+      0.05,
+      0.06,
+      0.07,
+      0.08
+    ],
+    "table": [
+      [
+        25.25,
+        23.87,
+        22.66,
+        21.59,
+        20.64,
+        19.79,
+        19.03
+      ],
+      [
+        26.01,
+        24.5,
+        23.19,
+        22.04,
+        21.03,
+        20.13,
+        19.32
+      ],
+      [
+        26.88,
+        25.22,
+        23.79,
+        22.55,
+        21.46,
+        20.5,
+        19.64
+      ],
+      [
+        27.89,
+        26.05,
+        24.48,
+        23.13,
+        21.94,
+        20.91,
+        19.99
+      ],
+      [
+        29.06,
+        27.01,
+        25.27,
+        23.78,
+        22.49,
+        21.37,
+        20.38
+      ],
+      [
+        30.46,
+        28.12,
+        26.18,
+        24.52,
+        23.11,
+        21.89,
+        20.82
+      ],
+      [
+        32.14,
+        29.45,
+        27.24,
+        25.39,
+        23.82,
+        22.48,
+        21.32
+      ]
+    ]
+  },
+  "archetype": {
+    "archetype_id": "blue_chip",
+    "label_zh": "蓝筹股",
+    "label_en": "Blue Chip",
+    "description_zh": "高 E, 高 BV, 低波动率, 低 PE。基本面扎实, 适合长期持有。",
+    "description_en": "High earnings, high book value, low volatility, low PE. Strong fundamentals, long-term hold.",
+    "fit_score": 0.38964707030767
+  },
+  "strategy": {
+    "position": "LONG",
+    "hold_period": "LONG",
+    "conviction": "BUY",
+    "rationale_zh": "高基本面 + 低波动 = 做多, 长期持有, 买入。这是教科书 buy-and-hold 标的。",
+    "rationale_en": "Strong fundamentals + low vol = Long, long-term hold, Buy. Textbook buy-and-hold.",
+    "improvements_zh": [
+      "继续投入,但避免 over-paying — 不要在估值过高时追加。",
+      "巩固已有基础(BV)而非追逐短期 E 提升。",
+      "建议 long-term 关系节点(见家长/同居等)推进。",
+      "DCF 显示上行空间 191%, 可适度加仓。"
+    ],
+    "improvements_en": [
+      "Continue investing but avoid over-paying — don't add at extreme valuations.",
+      "Strengthen fundamentals (BV) rather than chase short-term E growth.",
+      "Push for long-term commitment milestones.",
+      "DCF upside 191%; can scale up modestly."
+    ]
+  },
+  "scenarios": {
+    "bear": {
+      "E": 0.4099999999999998,
+      "BV": 8.974999999999998,
+      "P": 5.70625,
+      "g": 0.01999999999999999,
+      "beta": 0.9499999999999998,
+      "wacc": 0.16949999999999998,
+      "fair_mid": 10.457979820318398,
+      "upside_pct": 0.8327237363099055
+    },
+    "base": {
+      "E": 1.0625,
+      "BV": 15.5,
+      "P": 7.9375,
+      "g": 0.1,
+      "beta": 1.4,
+      "wacc": 0.174,
+      "fair_mid": 23.12519927485661,
+      "upside_pct": 1.9134109322653996
+    },
+    "bull": {
+      "E": 2.0187500000000003,
+      "BV": 22.025000000000002,
+      "P": 10.168750000000001,
+      "g": 0.18000000000000002,
+      "beta": 1.85,
+      "wacc": 0.1785,
+      "fair_mid": 42.96741124067856,
+      "upside_pct": 3.225436876772322
+    }
+  },
+  "forward_var_name": "",
+  "citations": [
+    "Modigliani, F., Miller, M. H. (1958). The Cost of Capital, Corporation Finance and the Theory of Investment. American Economic Review, 48, 261–297.",
+    "Modigliani, F., Miller, M. H. (1961). Dividend Policy, Growth, and the Valuation of Shares. Journal of Business, 34, 411–433.",
+    "Gordon, M. J. (1962). The Investment, Financing, and Valuation of the Corporation. Irwin.",
+    "Sharpe, W. F. (1964). Capital Asset Prices: A Theory of Market Equilibrium. Journal of Finance, 19, 425–442.",
+    "Lintner, J. (1965). The Valuation of Risk Assets. Review of Economics and Statistics, 47, 13–37.",
+    "Fama, E. F., French, K. R. (1993). Common risk factors in returns. Journal of Financial Economics, 33, 3–56.",
+    "Damodaran, A. (2002). Investment Valuation: Tools and Techniques for Determining the Value of Any Asset. Wiley.",
+    "Koller, T., Goedhart, M., Wessels, D. (2020). Valuation: Measuring and Managing the Value of Companies. McKinsey & Co.",
+    "Markowitz, H. (1952). Portfolio Selection. Journal of Finance, 7, 77–91.",
+    "Black, F., Scholes, M. (1973). The Pricing of Options and Corporate Liabilities. Journal of Political Economy, 81, 637–654.",
+    "Tversky, A., Kahneman, D. (1979). Prospect Theory. Econometrica, 47, 263–291.",
+    "Bowlby, J. (1969). Attachment and Loss, Vol. 1. Basic Books."
+  ],
+  "warnings": [],
+  "description": "smoke",
+  "ib_inputs": {
+    "fcf_base": 4.25,
+    "growth_y1_3": 0.1,
+    "growth_y4_5": 0.04,
+    "terminal_growth": 0.015000000000000003,
+    "ebit_margin": 0.25,
+    "reinvestment_rate": 0.32499999999999996,
+    "book_value": 15.5,
+    "comparable_pe": 18.0,
+    "comparable_pb": 1.8,
+    "comparable_ev_ebitda": 9.0,
+    "wacc_risk_premium": 0.05,
+    "beta": 1.4,
+    "investment_cost": 7.9375,
+    "exit_cost": 4.0,
+    "red_flag_discount": 0.0,
+    "moat": 0.5,
+    "risk_free": 0.04,
+    "market_premium": 0.06,
+    "wacc": 0.174
+  },
+  "dcf3": {
+    "explicit_pv": 11.848836270117232,
+    "fade_pv": 8.118718599832,
+    "terminal_value": 49.429808470683575,
+    "terminal_pv": 9.938205175244597,
+    "enterprise_value": 29.90576004519383,
+    "fair_value": 25.90576004519383,
+    "upside_pct": 2.2637178009693013,
+    "wacc": 0.174,
+    "yearly_fcf": [
+      4.675000000000001,
+      5.142500000000001,
+      5.6567500000000015,
+      6.222425000000002,
+      6.844667500000003,
+      7.084230862500002,
+      7.296757788375002,
+      7.479176733084376,
+      7.628760267746064,
+      7.743191671762254
+    ],
+    "yearly_pv": [
+      2.687925894378195,
+      2.518499560320285,
+      2.3597525692949866,
+      2.21101177702256,
+      2.071646469101206,
+      2.0901748233819237,
+      1.8337990358461516,
+      1.6010596352149107,
+      1.3910398874950674,
+      1.2026452178939466
+    ]
+  },
+  "multiples": {
+    "pe_implied": 18.0,
+    "pb_implied": 1.8,
+    "ev_ebitda_implied": 9.0,
+    "pe_value": 19.125,
+    "pb_value": 27.900000000000002,
+    "ev_ebitda_value": 15.778125,
+    "blended": 20.934375000000003
+  },
+  "asset": {
+    "book_floor": 15.5,
+    "replacement_cost": 12.700000000000001,
+    "value": 15.5
+  },
+  "blended": {
+    "dcf_value": 25.90576004519383,
+    "multiples_value": 20.934375000000003,
+    "asset_value": 15.5,
+    "weights": [
+      0.55,
+      0.35,
+      0.1
+    ],
+    "fair_low": 17.40203125,
+    "fair_mid": 23.12519927485661,
+    "fair_high": 28.848367299713217,
+    "upside_pct": 1.9134109322653996,
+    "pe_final": 7.470588235294118,
+    "pb_final": 0.5120967741935484,
+    "eps": 1.0625
+  },
+  "mc": {
+    "iters": 200,
+    "p10": 18.950267495483264,
+    "p50": 22.698991144863033,
+    "p90": 26.43452202866485,
+    "mean": 22.66446878111906,
+    "stdev": 2.8323991678517397,
+    "prob_above_cost": 1.0
+  },
+  "dyn_schema": {
+    "title_zh": "通用估值问卷",
+    "title_en": "",
+    "subtitle_zh": "未连接 LLM, 使用通用模板",
+    "subtitle_en": "",
+    "subject_kind": "other",
+    "stages": [
+      {
+        "id": "B1",
+        "label_zh": "她/他是谁 · 基本盘",
+        "why_matters_zh": "先把对方画像画清楚, 才有后面的估值。",
+        "sub_themes": [
+          {
+            "name_zh": "画像与历史",
+            "why_zh": "对方平时是什么样, 历史关系怎样",
+            "fields": [
+              {
+                "id": "value_delivered",
+                "label_zh": "TA 每周给你带来的正面价值有多大",
+                "label_en": "TA 每周给你带来的正面价值有多大",
+                "kind": "likert5",
+                "hint_zh": "综合评估: 情绪+陪伴+性吸引力+生活支持等",
+                "hint_en": "",
+                "anchor_low_zh": "1=几乎没有",
+                "anchor_high_zh": "5=非常多",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "fcf_base",
+                "scale": "linear",
+                "to_min": 0.5,
+                "to_max": 8.0,
+                "stage_id": "B1",
+                "sub_theme": "画像与历史"
+              },
+              {
+                "id": "book_assets",
+                "label_zh": "TA 已经累积下来的硬资产 (性格/履历/共同回忆)",
+                "label_en": "TA 已经累积下来的硬资产 (性格/履历/共同回忆)",
+                "kind": "likert5",
+                "hint_zh": "稀缺、难以替代的部分",
+                "hint_en": "",
+                "anchor_low_zh": "1=很少",
+                "anchor_high_zh": "5=非常多",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "book_value",
+                "scale": "linear",
+                "to_min": 1.0,
+                "to_max": 30.0,
+                "stage_id": "B1",
+                "sub_theme": "画像与历史"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "B2",
+        "label_zh": "走向哪里 · 趋势与预测",
+        "why_matters_zh": "捕捉关系势头, 估算未来 12 个月走向。",
+        "sub_themes": [
+          {
+            "name_zh": "近期与中期趋势",
+            "why_zh": "近期 vs 中期不同的成长率",
+            "fields": [
+              {
+                "id": "near_growth",
+                "label_zh": "未来 3 个月你期待 TA 的主动度/亲密度会变化多少",
+                "label_en": "未来 3 个月你期待 TA 的主动度/亲密度会变化多少",
+                "kind": "likert7",
+                "hint_zh": "综合考虑现状趋势",
+                "hint_en": "",
+                "anchor_low_zh": "1=明显倒退",
+                "anchor_high_zh": "7=飞速进展",
+                "min": 1.0,
+                "max": 7.0,
+                "step": 1.0,
+                "default": 4,
+                "options": [],
+                "ib_param": "revenue_growth_y1_3",
+                "scale": "linear",
+                "to_min": -0.1,
+                "to_max": 0.3,
+                "stage_id": "B2",
+                "sub_theme": "近期与中期趋势"
+              },
+              {
+                "id": "long_growth",
+                "label_zh": "1-3 年后这段关系还能继续升级吗",
+                "label_en": "1-3 年后这段关系还能继续升级吗",
+                "kind": "likert5",
+                "hint_zh": "看长期可持续性",
+                "hint_en": "",
+                "anchor_low_zh": "1=基本不可能",
+                "anchor_high_zh": "5=很有把握",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "terminal_growth",
+                "scale": "linear",
+                "to_min": -0.02,
+                "to_max": 0.05,
+                "stage_id": "B2",
+                "sub_theme": "近期与中期趋势"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "B3",
+        "label_zh": "相处含金量 · 内在估值",
+        "why_matters_zh": "每次相处真正的'含金量', 决定 DCF 的核心。",
+        "sub_themes": [
+          {
+            "name_zh": "情绪能量与稳定性",
+            "why_zh": "见 TA 是回血还是耗血, 状态稳不稳",
+            "fields": [
+              {
+                "id": "signal_clarity",
+                "label_zh": "TA 的信号有多清晰 (不模糊不混乱)",
+                "label_en": "TA 的信号有多清晰 (不模糊不混乱)",
+                "kind": "likert5",
+                "hint_zh": "TA 的喜欢/不喜欢是不是说得清",
+                "hint_en": "",
+                "anchor_low_zh": "1=完全混乱",
+                "anchor_high_zh": "5=非常清晰",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "ebit_margin",
+                "scale": "linear",
+                "to_min": 0.05,
+                "to_max": 0.45,
+                "stage_id": "B3",
+                "sub_theme": "情绪能量与稳定性"
+              },
+              {
+                "id": "effort_required",
+                "label_zh": "维持现状每周要花多少精力",
+                "label_en": "维持现状每周要花多少精力",
+                "kind": "likert5",
+                "hint_zh": "包括猜心思、安排、维系等",
+                "hint_en": "",
+                "anchor_low_zh": "1=零负担",
+                "anchor_high_zh": "5=非常累",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "reinvestment_rate",
+                "scale": "linear",
+                "to_min": 0.05,
+                "to_max": 0.6,
+                "stage_id": "B3",
+                "sub_theme": "情绪能量与稳定性"
+              },
+              {
+                "id": "volatility",
+                "label_zh": "TA 的状态/态度波动有多大",
+                "label_en": "TA 的状态/态度波动有多大",
+                "kind": "likert5",
+                "hint_zh": "今天热情明天冷淡这种",
+                "hint_en": "",
+                "anchor_low_zh": "1=非常稳",
+                "anchor_high_zh": "5=过山车",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "beta_proxy",
+                "scale": "linear",
+                "to_min": 0.4,
+                "to_max": 2.4,
+                "stage_id": "B3",
+                "sub_theme": "情绪能量与稳定性"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "B4",
+        "label_zh": "横向对照 · 市场与先例",
+        "why_matters_zh": "和同龄人/前任/类似案例对比, 给出 anchor。",
+        "sub_themes": [
+          {
+            "name_zh": "可比与先例",
+            "why_zh": "同等条件下的市场比价",
+            "fields": [
+              {
+                "id": "moat",
+                "label_zh": "TA 在你心里有多 unique (其他人能替代吗)",
+                "label_en": "TA 在你心里有多 unique (其他人能替代吗)",
+                "kind": "likert5",
+                "hint_zh": "稀缺性",
+                "hint_en": "",
+                "anchor_low_zh": "1=随时可替代",
+                "anchor_high_zh": "5=独一无二",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "moat",
+                "scale": "linear",
+                "to_min": 0.0,
+                "to_max": 1.0,
+                "stage_id": "B4",
+                "sub_theme": "可比与先例"
+              },
+              {
+                "id": "peer_compare",
+                "label_zh": "在你认识的同 type 人里 TA 排在哪个位置",
+                "label_en": "在你认识的同 type 人里 TA 排在哪个位置",
+                "kind": "likert5",
+                "hint_zh": "全方位对比",
+                "hint_en": "",
+                "anchor_low_zh": "1=远低于平均",
+                "anchor_high_zh": "5=Top 5%",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "comparable_pe",
+                "scale": "linear",
+                "to_min": 6.0,
+                "to_max": 30.0,
+                "stage_id": "B4",
+                "sub_theme": "可比与先例"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "B5",
+        "label_zh": "你的成本与退路",
+        "why_matters_zh": "你已投入多少, 还剩多少退路。",
+        "sub_themes": [
+          {
+            "name_zh": "投入与退出",
+            "why_zh": "看清自己真实的承受面",
+            "fields": [
+              {
+                "id": "your_invest",
+                "label_zh": "你目前每周在 TA 身上花的时间+情绪+钱 (折合小时)",
+                "label_en": "你目前每周在 TA 身上花的时间+情绪+钱 (折合小时)",
+                "kind": "number",
+                "hint_zh": "0-40 小时, 综合估算",
+                "hint_en": "",
+                "anchor_low_zh": "",
+                "anchor_high_zh": "",
+                "min": 0.0,
+                "max": 40.0,
+                "step": 1.0,
+                "default": 5,
+                "options": [],
+                "ib_param": "investment_cost",
+                "scale": "linear",
+                "to_min": 0.5,
+                "to_max": 60.0,
+                "stage_id": "B5",
+                "sub_theme": "投入与退出"
+              },
+              {
+                "id": "exit_difficulty",
+                "label_zh": "如果现在让你退出, 你能多顺利地退出",
+                "label_en": "如果现在让你退出, 你能多顺利地退出",
+                "kind": "likert5",
+                "hint_zh": "心理+生活影响综合",
+                "hint_en": "",
+                "anchor_low_zh": "1=随时优雅退出",
+                "anchor_high_zh": "5=已 all-in 无退路",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "exit_cost",
+                "scale": "linear",
+                "to_min": 0.0,
+                "to_max": 8.0,
+                "stage_id": "B5",
+                "sub_theme": "投入与退出"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "B6",
+        "label_zh": "压力情景与边界",
+        "why_matters_zh": "找出会让判断翻盘的边界条件。",
+        "sub_themes": [
+          {
+            "name_zh": "红旗与边界",
+            "why_zh": "极端情景下你的反应",
+            "fields": [
+              {
+                "id": "red_flag_count",
+                "label_zh": "你能数出几个 red flag (撒谎/拖延/三角关系/失约等)",
+                "label_en": "你能数出几个 red flag (撒谎/拖延/三角关系/失约等)",
+                "kind": "number",
+                "hint_zh": "0-10",
+                "hint_en": "",
+                "anchor_low_zh": "",
+                "anchor_high_zh": "",
+                "min": 0.0,
+                "max": 10.0,
+                "step": 1.0,
+                "default": 0,
+                "options": [],
+                "ib_param": "red_flags",
+                "scale": "linear",
+                "to_min": 0.0,
+                "to_max": 0.25,
+                "stage_id": "B6",
+                "sub_theme": "红旗与边界"
+              },
+              {
+                "id": "stress_tolerance",
+                "label_zh": "如果 TA 突然消失一周, 你能承受吗",
+                "label_en": "如果 TA 突然消失一周, 你能承受吗",
+                "kind": "likert5",
+                "hint_zh": "极端情景测试",
+                "hint_en": "",
+                "anchor_low_zh": "1=完全无法承受",
+                "anchor_high_zh": "5=完全无所谓",
+                "min": 1.0,
+                "max": 5.0,
+                "step": 1.0,
+                "default": 3,
+                "options": [],
+                "ib_param": "wacc_risk_premium",
+                "scale": "inverse",
+                "to_min": 0.0,
+                "to_max": 0.1,
+                "stage_id": "B6",
+                "sub_theme": "红旗与边界"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

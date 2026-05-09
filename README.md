@@ -1,22 +1,43 @@
-# Wall Street Valuation Workbench
+# 对象/暧昧估值工作台 · Crush & Partner Valuation Workbench  ·  v0.3
 
 English | [中文](README.zh-CN.md)
 
-> Half-serious meme tool that runs **Wall Street IB-grade valuation** (DCF, P/E, P/B, EPS, sensitivity tables, forward-looking scenarios, archetype classification) on a person, a crush, a relationship, or yourself.
+> A half-serious investment-banking-grade valuation tool **specifically for valuing your partner or crush**. The LLM personalizes a 6-stage questionnaire (modelled on the IPO valuation workflow: business understanding → historical → forecast → DCF → comparables → stress-test), the local engine runs three-method valuation with Monte-Carlo P10/P50/P90, and the LLM writes a full IB-style memo (thesis, bull/base/bear narratives, top risks, action plan, exit strategy).
 
 ```bash
-python app.py
-# open http://127.0.0.1:8782
+python app.py            # http://127.0.0.1:8782
 ```
 
-- **Pure Python stdlib** — zero runtime dependencies; one command to start.
-- **Local-first** — all computation in your browser/machine; no upload, no telemetry.
-- **Bilingual** — English + 中文 on the same code.
-- **12+ canonical citations** — Modigliani-Miller, Gordon, Sharpe-Lintner, Damodaran, McKinsey *Valuation*, etc.
+## What's new in v0.3
+
+- **Focused product**: now specifically for **对象 / 暧昧对象** (partners and crushes), not "anything"
+- **6-stage dynamic flow** (B1–B6) modelled on canonical IB IPO valuation: 她是谁 → 走向哪里 → 相处含金量 → 横向对照 → 成本与退路 → 压力情景
+- **LLM decides sub-themes within each stage** — two valuations of two different relationships will get genuinely different question structures (long-distance vs busy-job vs ex-shadow each get tailored sub-themes)
+- **Full provider/model picker** mirroring AI-decision-engine-zh: each provider has a preset model list + custom model textbox + custom OpenAI-compatible endpoint + **test-connection probe button**
+- **Self-contained prompts** (3 calls — schema, forward variables, narrative) — every call carries full context, safe against API gateways that don't preserve conversation history
+- **LLM-generated investment memo** in the report: thesis, bull/base/bear narratives, top-3 risks (trigger / consequence / early signal), week / month / quarter action lists, exit strategy, key assumptions, comparable narrative
+- **Auto-derived forward variables** — LLM proposes 2-3 candidate forward variables with personalized rationale and recommended Δ%, instead of asking the user to type them
+- **Light theme + larger fonts** — cream/parchment background, ink text, 17–18px base, no English mixing
+- **Session history** — `crushValuation.sessions.v1` localStorage, cap 20, with Continue/Delete buttons on home
+
+## What stayed from v0.2
+
+- **LLM-driven dynamic schema** — Stage A is a free-text textarea; an LLM converts your description into 8–12 user-friendly proxy questions whose every field is bound to a real IB parameter (FCF / growth / margin / WACC risk premium / comparable P/E / book value / moat / red flags …). Pattern lifted from [AI-decision-engine-zh](https://github.com/ZhenyuanPAN822/AI-decision-engine-zh) — keys live in the browser, server is a thin proxy.
+- **Multi-vendor LLM** — DeepSeek, OpenAI, Anthropic, Gemini, or any OpenAI-compatible custom endpoint. Switchable per session.
+- **Three-method blended valuation** — three-stage DCF (5y explicit + 5y fade + Gordon terminal) **+** comparables (P/E + P/B + EV/EBITDA, moat-tuned) **+** asset floor; archetype-weighted blend with low / mid / high range.
+- **CAPM WACC** — `rf + β · ERP + idiosyncratic risk premium`, with safety floor `> terminal_g + 2%`.
+- **Monte-Carlo P10 / P50 / P90** — 800 iterations perturbing growth, margin, WACC, beta, comparables; reports `P(fair > cost)`.
+- **Fallback works offline** — uncheck "use LLM" and a 10-question generic schema runs the same engine. No key needed to try.
+
+## Stays the same from v0.1
+
+- **Pure Python stdlib** — zero runtime dependencies; LLM calls use `urllib`.
+- **Local-first** — all computation on your machine; LLM keys held by your browser, never logged server-side.
+- **Bilingual** — English + 中文.
+- **12+ canonical citations** — Modigliani-Miller, Gordon, Sharpe-Lintner, Markowitz, Damodaran, McKinsey *Valuation*, Fama-French, Black-Scholes, Tversky-Kahneman, Bowlby.
 - **Session-resumable** — auto-save to localStorage; export/import as JSON.
-- **Dynamic per-target form** — stages fixed (A/B/C/D), fields adapt per target type. Architecture inspired by [AI-decision-engine-zh](https://github.com/ZhenyuanPAN822/AI-decision-engine-zh).
-- **Forward-looking variable** — IB-style "what if X happens" sensitivity, named.
-- **Bloomberg-style tear sheet** — hero readouts, sensitivity heatmap, bear/base/bull comparison.
+- **Forward-looking variable** — name the one event that matters; the engine perturbs it ±Δ% across bear/base/bull.
+- **Bloomberg-style tear sheet** — hero readouts, P10/P50/P90 fair-value range, three-method breakdown, sensitivity heatmap, scenario comparison.
 
 ## Four Valuation Targets
 
