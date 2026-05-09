@@ -120,7 +120,7 @@ def _parse_field(raw: dict, idx: int, stage_id: str = "", sub_theme: str = "") -
 
 
 def parse_dyn_schema(obj: dict) -> DynamicSchema:
-    """Parse LLM JSON into DynamicSchema. Supports both flat (v0.2) and 6-stage (v0.3)."""
+    """Parse LLM JSON into DynamicSchema. Accepts both flat and 6-stage layouts."""
     if not isinstance(obj, dict):
         return get_fallback_schema()
 
@@ -180,7 +180,7 @@ def parse_dyn_schema(obj: dict) -> DynamicSchema:
             stages=tuple(stages_out),
         )
 
-    # Flat-schema fallback (v0.2 or LLM that ignored stages key)
+    # Flat-schema fallback (when LLM omits the stages key)
     flat = obj.get("fields") or obj.get("questions") or obj.get("items") or []
     if flat:
         fields_out = []

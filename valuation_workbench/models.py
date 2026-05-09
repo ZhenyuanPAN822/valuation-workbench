@@ -170,7 +170,7 @@ class ForensicsReport:
     forward_var_name: str
     citations: tuple
     warnings: tuple
-    version: str = "0.2.0"
+    version: str = "0.3.1"
     # Optional IB-grade extensions (set by run_pipeline_ib)
     ib_inputs: Any = None
     dcf3: Any = None
@@ -384,8 +384,8 @@ class DynamicSchema:
     subtitle_zh: str
     subtitle_en: str
     subject_kind: str   # person/crush/relationship/self/other
-    stages: tuple = ()      # tuple of DynamicStage (preferred for v0.3)
-    fields: tuple = ()      # legacy flat fields (compat with v0.2)
+    stages: tuple = ()      # tuple of DynamicStage (canonical 6-stage layout)
+    fields: tuple = ()      # flat fields (used when an LLM emits a flat schema or by fixed-target flow)
 
     @property
     def all_fields(self) -> tuple:
@@ -417,7 +417,7 @@ class DynamicSchema:
 
 @dataclass
 class Session:
-    version: str = "0.1.0"
+    version: str = "0.3.1"
     saved_at: str = ""
     lang: str = "zh"
     stage: str = "A"   # A/B/C/D

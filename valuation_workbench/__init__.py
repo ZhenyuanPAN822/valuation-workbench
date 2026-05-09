@@ -45,7 +45,7 @@ from .svg_renderer import (
     render_scenario_comparison,
 )
 
-__version__ = "0.2.0"
+__version__ = "0.3.1"
 
 CITATIONS = (
     "Modigliani, F., Miller, M. H. (1958). The Cost of Capital, Corporation Finance and the Theory of Investment. American Economic Review, 48, 261–297.",

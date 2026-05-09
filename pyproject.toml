@@ -1,7 +1,7 @@
 [project]
 name = "valuation-workbench"
-version = "0.1.0"
-description = "Wall Street IB-grade valuation workbench: DCF, P/E, P/B, EPS, sensitivity tables, forward-looking scenarios, archetype classification. Pure Python stdlib. Local-first."
+version = "0.3.1"
+description = "IB-grade valuation workbench for partners and crushes. LLM-personalized 6-stage IPO-style questionnaire + three-method blended valuation (DCF + comparables + asset) + Monte-Carlo P10/P50/P90 + investment memo. Pure Python stdlib, local-first, browser-held LLM keys."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

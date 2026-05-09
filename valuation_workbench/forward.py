@@ -1,8 +1,8 @@
 """Forward-looking variable + 3-scenario pipeline.
 
 Two pipelines coexist:
-  run_pipeline       — legacy (4-card hardcoded Schema)
-  run_pipeline_ib    — IB-grade (LLM-generated DynamicSchema + IB engine)
+  run_pipeline       — fixed-target schema flow (hardcoded fields per target type)
+  run_pipeline_ib    — IB-grade flow (LLM-generated DynamicSchema + IB engine)
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from .valuation.ib_engine import (
 )
 
 
-# ───────────────────────── Legacy pipeline (kept for tests/back-compat) ─────────────────────────
+# ───────────────────────── Fixed-schema pipeline (4-target flow) ─────────────────────────
 
 def build_scenarios(schema: Schema, base_answers: Answers, forward_var_id: str = "", delta_pct: float = 0.30) -> dict:
     forward_ids = []
